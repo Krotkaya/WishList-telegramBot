@@ -1,9 +1,9 @@
-package ConsoleBot.logic;
+package logic;
 
-public class Response {
+public class Request {
     private final String message;
 
-    public Response(String message) {
+    public Request(String message) {
         this.message = message;
     }
 

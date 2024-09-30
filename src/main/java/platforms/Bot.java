@@ -1,4 +1,4 @@
-package ConsoleBot.logic.intarface;
+package platforms;
 
 public interface Bot {
     void startBot();

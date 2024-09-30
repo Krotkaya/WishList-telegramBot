@@ -1,6 +1,7 @@
-package ConsoleBot.logic.intarface;
+package platforms.console;
 
-import ConsoleBot.logic.Request;
+import platforms.InputReader;
+import logic.Request;
 
 import java.util.Scanner;
 

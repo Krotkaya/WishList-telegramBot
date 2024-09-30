@@ -1,7 +1,7 @@
-package ConsoleBot.logic.intarface;
+package platforms.console;
 
-import ConsoleBot.logic.Response;
-import ConsoleBot.logic.OutputWriter;
+import logic.Response;
+import logic.OutputWriter;
 
 public class ConsoleOutputWriter implements OutputWriter {//отвечает за вывод ответов в консоль
     @Override

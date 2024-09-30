@@ -1,10 +1,9 @@
-package ConsoleBot.logic.intarface;
+package platforms.console;
 
-import ConsoleBot.logic.Request;
-import ConsoleBot.logic.OutputWriter;
-import ConsoleBot.logic.RequestHandler;
+import logic.*;
+import platforms.InputReader;
 
-public class ConsoleBot implements Bot {
+public class ConsoleBot implements platforms.Bot {
     private final InputReader inputReader;
     private final OutputWriter outputWriter;
     private final RequestHandler requestHandler;
