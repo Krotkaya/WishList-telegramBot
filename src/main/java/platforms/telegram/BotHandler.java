@@ -1,4 +1,5 @@
 package platforms.telegram;
+import logic.RequestHandler;
 
 public class BotHandler {
     public static String handleMessage(String message) {

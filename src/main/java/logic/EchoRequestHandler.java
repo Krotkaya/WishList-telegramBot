@@ -3,7 +3,7 @@ package logic;
 /**
  *
  */
-public class ConsoleRequestHandler implements RequestHandler {//создание класса, который будет содержать логику для обработки запросов. Ключевое слово implements указывает на то, что этот класс обязан реализовать все методы, определенные в интерфейсе RequestHandler.
+public class EchoRequestHandler implements RequestHandler {//создание класса, который будет содержать логику для обработки запросов. Ключевое слово implements указывает на то, что этот класс обязан реализовать все методы, определенные в интерфейсе RequestHandler.
 
     /**
      * @param request

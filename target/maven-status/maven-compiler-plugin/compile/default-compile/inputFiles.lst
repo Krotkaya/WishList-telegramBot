@@ -1,0 +1,15 @@
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/Main.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/logic/ConsoleRequestHandler.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/logic/OutputWriter.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/logic/Request.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/logic/RequestHandler.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/logic/Response.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/Bot.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/InputReader.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/console/ConsoleBot.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/console/ConsoleInputReader.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/console/ConsoleOutputWriter.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/telegram/BotHandler.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/telegram/TelegramBot.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/telegram/TelegramInputReader.java
+/Users/aleksandakrotkaa/Desktop/Java/WishList-telegramBot/src/main/java/platforms/telegram/TelegramOutputWriter.java
