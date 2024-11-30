@@ -1,4 +1,4 @@
-package ru.oop.logic;
+package ru.oop.logic.other;
 
 public class Response {
     private final String message;

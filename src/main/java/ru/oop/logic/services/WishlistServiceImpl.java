@@ -17,14 +17,14 @@ public class WishlistServiceImpl implements WishlistService {
 
 
     @Override
-    public Wishlist createWishlist(Long userId, String name) {
+    public Wishlist createWishlist(long userId, String name) {
         long id = Math.abs(random.nextLong());
         Wishlist wishlist = new Wishlist(id, userId, name, new ArrayList<>());
         return repository.save(wishlist);
     }
 
     @Override
-    public void addWishToWishlist(Long wishlistId, Wish wish) {
+    public void addWishToWishlist(long wishlistId, Wish wish) {
         // Получаем вишлист из репозитория
 
         Wishlist wishlist = repository.findById(wishlistId);
@@ -40,6 +40,8 @@ public class WishlistServiceImpl implements WishlistService {
             wishlist.getWishes().remove(wish); // Удаляем старый подарок
         }
 
+        // Удаляем старое пожелание, если оно уже существует
+        wishlist.getWishes().removeIf(existingWish -> existingWish.getId().equals(wish.getId()));
         wishlist.getWishes().add(wish);
 
         // Сохраняем изменения
@@ -47,7 +49,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void deleteWishFromWishlist(Long wishlistId, Long wishId) {
+    public void deleteWishFromWishlist(long wishlistId, long wishId) {
         // Получаем вишлист из репозитория
         Wishlist wishlist = repository.findById(wishlistId);
         if (wishlist == null) {
@@ -62,7 +64,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void deleteWishlist(Long wishlistId) {
+    public void deleteWishlist(long wishlistId) {
         // Удаляем вишлист через репозиторий
         repository.deleteById(wishlistId);
     }

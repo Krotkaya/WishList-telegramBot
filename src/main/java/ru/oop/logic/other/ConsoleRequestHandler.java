@@ -1,4 +1,4 @@
-package ru.oop.logic;
+package ru.oop.logic.other;
 
 /**
  *
@@ -15,6 +15,6 @@ public class ConsoleRequestHandler implements RequestHandler {//создание
     @Override
     public void handle(Request request, OutputWriter writer) {
         Response response = new Response(request.getMessage());
-        writer.write(response);
+        writer.write(String.valueOf(response));
     }
 }

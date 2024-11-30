@@ -1,7 +1,6 @@
 package ru.oop.platforms.telegram;
 
-import ru.oop.logic.OutputWriter;
-import ru.oop.logic.Response;
+import ru.oop.logic.other.OutputWriter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -15,10 +14,10 @@ public class TelegramOutputWriter implements OutputWriter {
     }
 
     @Override
-    public void write(Response response) {
+    public void write(String response) {
         SendMessage message = SendMessage.builder()
                 .chatId(chatId)
-                .text(response.getMessage())
+                .text(response)
                 .build();
 
         executeMessage(message);

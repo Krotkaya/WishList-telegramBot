@@ -1,7 +1,7 @@
 package ru.oop.platforms.console;
 
 import ru.oop.platforms.InputReader;
-import ru.oop.logic.Request;
+import ru.oop.logic.other.Request;
 
 import java.util.Scanner;
 

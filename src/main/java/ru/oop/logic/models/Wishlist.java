@@ -13,6 +13,14 @@ public class Wishlist {
     private String name;         // Название списка
     private List<Wish> wishes;   // Список желаний
 
+    // Конструктор по умолчанию
+    public Wishlist() {
+        this.id = null;
+        this.userId = null;
+        this.name = "";
+        this.wishes = List.of();
+    }
+
     // Конструктор
     public Wishlist(Long id, Long userId, String name, List<Wish> wishes) {
         this.id = id;
