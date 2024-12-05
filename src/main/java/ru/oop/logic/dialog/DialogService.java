@@ -91,7 +91,6 @@ public class DialogService {
         Long wishId = generateWishId(); // Предположим, что у нас есть метод для генерации ID
         Wish wish = new Wish(wishId, wishDescription);
         wishlistService.addWishToWishlist(wishlistId, wish);
-        //return "Пожелание '" + wish.getText() + "' успешно добавлено в вишлист с ID " + wishlistId + ".";
         return "Пожелание '" + wish.getDescription() + "' успешно добавлено в вишлист с ID " + wishlistId + ".";
     }
 

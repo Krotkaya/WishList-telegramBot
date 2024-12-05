@@ -94,6 +94,8 @@ public class DialogRequestHandler implements RequestHandler {
     }
 }*/
 
+
+
 import ru.oop.logic.commands.Command;
 import ru.oop.logic.other.RequestHandler;
 import ru.oop.logic.other.Request;
@@ -127,12 +129,14 @@ public class DialogRequestHandler implements RequestHandler {
             }
         }
 
-        if (response == null) {response = new Response("Неизвестная команда.");
+        if (response == null) {
+            response = new Response("Неизвестная команда.");
         }
 
         writer.write(response.getMessage());
     }
 }
+
         /*Response response = null;
 
         for (Command command : commands) {

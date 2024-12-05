@@ -27,5 +27,4 @@ public class UserService {
         return users.get(userId); // Поиск пользователя по id
     }
 
-    // Другие методы для работы с пользователями, если это необходимо
 }

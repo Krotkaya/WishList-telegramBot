@@ -31,9 +31,13 @@ public class CreateWishlistCommand implements Command {
         Wishlist wishlist = wishlistService.createWishlist(userId, name);
 
         // Возвращаем созданный ответ
-        return new Response("Вишлист '" + wishlist.getName() + "' успешно создан.");
+        return new Response("Вишлист '" + wishlist.getName() + "' успешно создан.ID вашего вишлиста: " + wishlist.getId());
     }
 }
+
+
+
+
 /*public class CreateWishlistCommand implements Command {
     private final WishlistService wishlistService;
 

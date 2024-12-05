@@ -14,7 +14,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final String botToken; // Добавьте это поле
 
 
-    public TelegramBot(DialogRequestHandler dialogRequestHandler, UserService userService) {
+    public TelegramBot(DialogRequestHandler dialogRequestHandler, UserService userService, String botToken) {
         this.dialogRequestHandler = dialogRequestHandler;
         this.userService = userService;
         this.botToken = botToken; // Инициализируем токен
@@ -29,28 +29,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return botToken;
     }
-/*public class TelegramBot extends TelegramLongPollingBot {
-    private final RequestHandler requestHandler;
-    private final String botToken;
 
-    public TelegramBot(RequestHandler requestHandler, String botToken) {
-        this.requestHandler = requestHandler; // сохраняем объект RequestHandler
-        this.botToken = botToken; // сохраняем токен бота
-    }*/
 
     @Override
-    /*public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) { // проверяем, что сообщение есть и оно текстовое
-            String incomingMessage = update.getMessage().getText();
-            Request request = new Request(incomingMessage);
-
-            String chatId = String.valueOf(update.getMessage().getChatId());
-            TelegramOutputWriter telegramOutputWriter = new TelegramOutputWriter(chatId, this);
-
-            // Обработка запроса
-            requestHandler.handle(request, telegramOutputWriter);
-        }
-    }*/
 
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -67,3 +48,28 @@ public class TelegramBot extends TelegramLongPollingBot {
 
 
 }
+
+
+
+/*public class TelegramBot extends TelegramLongPollingBot {
+    private final RequestHandler requestHandler;
+    private final String botToken;
+
+    public TelegramBot(RequestHandler requestHandler, String botToken) {
+        this.requestHandler = requestHandler; // сохраняем объект RequestHandler
+        this.botToken = botToken; // сохраняем токен бота
+    }*/
+
+
+    /*public void onUpdateReceived(Update update) {
+        if (update.hasMessage() && update.getMessage().hasText()) { // проверяем, что сообщение есть и оно текстовое
+            String incomingMessage = update.getMessage().getText();
+            Request request = new Request(incomingMessage);
+
+            String chatId = String.valueOf(update.getMessage().getChatId());
+            TelegramOutputWriter telegramOutputWriter = new TelegramOutputWriter(chatId, this);
+
+            // Обработка запроса
+            requestHandler.handle(request, telegramOutputWriter);
+        }
+    }*/

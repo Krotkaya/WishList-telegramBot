@@ -24,8 +24,8 @@ public class AddWishToWishlistCommand implements Command{
 
     @Override
     public Pattern getCommandPattern() {
-        // Возвращаем регулярное выражение в виде Pattern
-        return Pattern.compile("add wish (\\d+) (.+)"); // Пример паттерна для команды
+        // Возвращаем регулярное выражение в виде Pattern. Лучше сделать один раз. Поместить компеляцию в класс
+        return Pattern.compile("/add wish (\\d+) (.+)");
     }
 
     public Response executeCommand(Request request, Matcher matched, User currentUser) {
@@ -34,7 +34,7 @@ public class AddWishToWishlistCommand implements Command{
         String wishDescription = matched.group(2); // описание из второй группы
 
         // Создаём новый объект Wish
-        Wish wish = new Wish(null, wishDescription); // null для id, если вы будете генерировать его на стороне сервиса
+        Wish wish = new Wish(null, wishDescription);
 
         // Добавление желания в список желаний с помощью метода сервиса
         try {
@@ -45,6 +45,9 @@ public class AddWishToWishlistCommand implements Command{
         }
     }
 }
+
+
+
 
     /*public void execute(Request request, OutputWriter outputWriter, Long chatId) {
         // Получаем текст сообщения из объекта Request
