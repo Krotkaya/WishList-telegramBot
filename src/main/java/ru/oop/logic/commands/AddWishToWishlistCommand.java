@@ -1,11 +1,9 @@
 package ru.oop.logic.commands;
 
-import ru.oop.logic.other.Request;
-import ru.oop.logic.other.Response;
-import ru.oop.logic.other.OutputWriter;
+import ru.oop.logic.Request;
+import ru.oop.logic.Response;
 import ru.oop.logic.services.WishlistService;
 import ru.oop.logic.services.UserService;
-import ru.oop.logic.models.Wishlist;
 import ru.oop.logic.models.Wish;
 import ru.oop.logic.models.User;
 
@@ -34,7 +32,7 @@ public class AddWishToWishlistCommand implements Command{
         String wishDescription = matched.group(2); // описание из второй группы
 
         // Создаём новый объект Wish
-        Wish wish = new Wish(null, wishDescription);
+        Wish wish = new Wish(null, wishDescription, true);
 
         // Добавление желания в список желаний с помощью метода сервиса
         try {

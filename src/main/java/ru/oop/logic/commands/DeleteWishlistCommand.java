@@ -1,10 +1,8 @@
 package ru.oop.logic.commands;
 
-import ru.oop.logic.other.Request;
-import ru.oop.logic.other.Response;
+import ru.oop.logic.Request;
+import ru.oop.logic.Response;
 import ru.oop.logic.services.WishlistService;
-import ru.oop.logic.models.Wishlist;
-import ru.oop.logic.models.Wish;
 import ru.oop.logic.models.User;
 
 import java.util.regex.Matcher;

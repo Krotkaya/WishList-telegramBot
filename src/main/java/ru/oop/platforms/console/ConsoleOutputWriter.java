@@ -1,6 +1,6 @@
 package ru.oop.platforms.console;
 
-import ru.oop.logic.other.OutputWriter;
+import ru.oop.logic.OutputWriter;
 
 public class ConsoleOutputWriter implements OutputWriter {//отвечает за вывод ответов в консоль
     @Override

@@ -1,6 +1,6 @@
 package ru.oop.platforms.telegram;
-import ru.oop.logic.other.Request;
-import ru.oop.logic.other.OutputWriter;
+import ru.oop.logic.Request;
+import ru.oop.logic.OutputWriter;
 import ru.oop.logic.dialog.DialogRequestHandler;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,8 +11,7 @@ import ru.oop.logic.services.UserService;
 public class TelegramBot extends TelegramLongPollingBot {
     private final DialogRequestHandler dialogRequestHandler;
     private final UserService userService;
-    private final String botToken; // Добавьте это поле
-
+    private final String botToken;
 
     public TelegramBot(DialogRequestHandler dialogRequestHandler, UserService userService, String botToken) {
         this.dialogRequestHandler = dialogRequestHandler;

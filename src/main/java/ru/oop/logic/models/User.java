@@ -1,14 +1,18 @@
 package ru.oop.logic.models;
+import java.util.List;
+import java.util.ArrayList;
 
 public class User {
     private Long id;            // Уникальный идентификатор пользователя
     private String username;    // Имя пользователя
     private Long chatId;        // Идентификатор чата Telegram
+    private List<Wishlist> wishlists;    // Добавляем список вишлистов
 
     public User(Long id, String username, Long chatId) {
         this.id = id;
         this.username = username;
         this.chatId = chatId;
+        this.wishlists = new ArrayList<>();
     }
 
     public Long getId() {
@@ -35,12 +39,21 @@ public class User {
         this.chatId = chatId;
     }
 
+    public List<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void addWishlist(Wishlist wishlist) {
+        this.wishlists.add(wishlist);
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", chatId=" + chatId +
+                ", wishlists=" + wishlists +
                 '}';
     }
 

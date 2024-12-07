@@ -6,6 +6,7 @@ import ru.oop.logic.repositories.WishlistRepository;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 public class WishlistServiceImpl implements WishlistService {
 
@@ -67,5 +68,29 @@ public class WishlistServiceImpl implements WishlistService {
     public void deleteWishlist(long wishlistId) {
         // Удаляем вишлист через репозиторий
         repository.deleteById(wishlistId);
+    }
+
+    @Override
+    public List<Wishlist> getWishlistsByUserId(long userId) {
+        return repository.findByUsername(userId); // Получаем список вишлистов по userId
+    }
+
+    @Override
+    public void markItemAsTaken(long wishlistId, long wishId) {
+        Wishlist wishlist = repository.findById(wishlistId);
+        if (wishlist == null) {
+            throw new IllegalArgumentException("Wishlist с ID " + wishlistId + " не найден.");
+        }
+
+        for (Wish wish : wishlist.getWishes()) {
+            if (wish.getId().equals(wishId)) {
+                if (!wish.isAvailable()) {
+                    throw new IllegalArgumentException("Wish с ID " + wishId + " уже занято.");
+                }
+                wish.setAvailable(false); // Отметить как занято
+                break;
+            }
+        }
+        repository.save(wishlist); // Сохранить изменения
     }
 }

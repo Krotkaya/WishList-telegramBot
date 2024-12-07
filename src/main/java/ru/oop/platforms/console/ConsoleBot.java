@@ -1,8 +1,8 @@
 package ru.oop.platforms.console;
 
-import ru.oop.logic.other.OutputWriter;
-import ru.oop.logic.other.Request;
-import ru.oop.logic.other.RequestHandler;
+import ru.oop.logic.OutputWriter;
+import ru.oop.logic.Request;
+import ru.oop.logic.RequestHandler;
 import ru.oop.platforms.InputReader;
 
 public class ConsoleBot implements ru.oop.platforms.Bot {

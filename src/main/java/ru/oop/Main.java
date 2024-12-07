@@ -1,6 +1,5 @@
 package ru.oop;
 
-import ru.oop.logic.other.ConsoleRequestHandler;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.oop.logic.commands.*;
@@ -32,7 +31,9 @@ public class Main {
                 new CreateWishlistCommand(wishlistService),
                 new AddWishToWishlistCommand(wishlistService, userService),
                 new DeleteWishFromWishlistCommand(wishlistService),
-                new DeleteWishlistCommand(wishlistService)
+                new DeleteWishlistCommand(wishlistService),
+                new ViewWishlistsCommand(wishlistService, userService),
+                new ClaimWishlistItemCommand(wishlistService, userService)
         );
 
         // Создаем обработчик запросов и передаем ему список команд

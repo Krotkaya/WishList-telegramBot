@@ -43,7 +43,7 @@ class WishlistServiceImplTest {
         long id = 123;
         var name = "Car";
         Wishlist wishlist = service.createWishlist(id, name);
-        Wish wish = new Wish(id,name);
+        Wish wish = new Wish(id,name,true);
         service.addWishToWishlist(wishlist.getId(), wish);
         assertTrue( wishlist.getWishes().contains(wish));
     }
@@ -56,8 +56,8 @@ class WishlistServiceImplTest {
         var nameFirst = "Car";
         var nameSecond = "Wheel";
         Wishlist wishlist = service.createWishlist(Id, name);
-        Wish wishFirst = new Wish(idFirst,nameFirst);
-        Wish wishSecond = new Wish(idSecond,nameSecond);
+        Wish wishFirst = new Wish(idFirst,nameFirst,true);
+        Wish wishSecond = new Wish(idSecond,nameSecond,true);
         service.addWishToWishlist(wishlist.getId(), wishFirst);
         service.addWishToWishlist(wishlist.getId(), wishSecond);
         assertEquals( 1, wishlist.getWishes().size());
@@ -67,8 +67,8 @@ class WishlistServiceImplTest {
     void deleteWishFromWishlist() {
         long id = 123;
          var name = "Car";
-        Wish wish1 = new Wish(1L, "New Phone");
-        Wish wish2 = new Wish(2L, "New Laptop");
+        Wish wish1 = new Wish(1L, "New Phone", true);
+        Wish wish2 = new Wish(2L, "New Laptop", true);
         Wishlist wishlist = service.createWishlist(id, name);
         service.addWishToWishlist(wishlist.getId(), wish1);
         service.addWishToWishlist(wishlist.getId(), wish2);

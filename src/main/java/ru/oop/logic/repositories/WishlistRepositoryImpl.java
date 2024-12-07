@@ -4,6 +4,8 @@ import ru.oop.logic.models.Wishlist;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class WishlistRepositoryImpl implements WishlistRepository {
 
@@ -29,5 +31,16 @@ public class WishlistRepositoryImpl implements WishlistRepository {
     @Override
     public void deleteById(Long id) {
         database.remove(id);
+    }
+
+    @Override
+    public List<Wishlist> findByUsername(long userId) {
+        List<Wishlist> userWishlists = new ArrayList<>();
+        for (Wishlist wishlist : database.values()) {
+            if (wishlist.getUserId() == userId) {
+                userWishlists.add(wishlist);
+            }
+        }
+        return userWishlists;
     }
 }

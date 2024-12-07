@@ -1,6 +1,6 @@
 package ru.oop.platforms.telegram;
 
-import ru.oop.logic.other.OutputWriter;
+import ru.oop.logic.OutputWriter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
