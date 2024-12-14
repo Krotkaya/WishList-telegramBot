@@ -27,4 +27,9 @@ public class DeleteWishFromWishlistCommand implements Command {
         wishlistService.deleteWishFromWishlist(wishlistId, wishId); // Удаление пожелания
         return new Response("Пожелание с ID " + wishId + " успешно удалено из вишлиста с ID " + wishlistId + ".");
     }
+
+    @Override
+    public void execute(String chatId, String[] args) {
+
+    }
 }

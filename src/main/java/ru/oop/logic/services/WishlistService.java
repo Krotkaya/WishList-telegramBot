@@ -5,7 +5,7 @@ import ru.oop.logic.models.Wishlist;
 
 public interface WishlistService {
 
-    Wishlist createWishlist(long userId, String name);//передаем сразу wishlist
+    Wishlist createWishlist(Wishlist wishlist);//передаем сразу wishlist
 
     void addWishToWishlist(long wishlistId, Wish wish);//заменяю long на UUID
 

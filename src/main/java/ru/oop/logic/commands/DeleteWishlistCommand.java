@@ -26,4 +26,20 @@ public class DeleteWishlistCommand implements Command {
         wishlistService.deleteWishlist(wishlistId); // Удаление вишлиста
         return new Response("Вишлист с ID " + wishlistId + " успешно удален.");
     }
+
+    @Override
+    public void execute(String chatId, String[] args) {
+        if (args.length == 0) {
+            System.out.println("Usage: /deleteWishlist <wishlistId>");
+            return;
+        }
+
+        try {
+            Long wishlistId = Long.valueOf(args[0]);
+            wishlistService.deleteWishlist(wishlistId);
+            System.out.println("Wishlist with ID " + wishlistId + " has been deleted.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid wishlist ID format. Please provide a numeric ID.");
+        }
+    }
 }

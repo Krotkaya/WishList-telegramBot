@@ -1,17 +1,30 @@
 package ru.oop.logic.models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "wishes")
 public class Wish {
 
-    private Long id;            // Уникальный идентификатор желания
-    private String description; // Описание желания (пока просто текст)
-    private boolean available = true; // По умолчанию доступно
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Wish(Long id, String description, boolean available) {
-        this.id = id;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "wishlist_id", nullable = false) // Связь с Wishlist
+    private Wishlist wishlist;
+
+    public Wish() {}
+
+    public Wish(String description, Wishlist wishlist) {
         this.description = description;
-        this.available = available;
+        this.wishlist = wishlist;
     }
 
+    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -28,28 +41,29 @@ public class Wish {
         this.description = description;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public Wishlist getWishlist() {
+        return wishlist;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setWishlist(Wishlist wishlist) {
+        this.wishlist = wishlist;
     }
 
-    // Переопределение toString для удобного отображения
     @Override
     public String toString() {
         return "Wish{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
+                ", wishlist=" + wishlist +
                 '}';
     }
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Wish)) return false;
-        Wish other = (Wish) obj;
-        return id != null && id.equals(other.id);
+        if (!(obj instanceof Wish otherWish)) {
+            return false;
+        }
+        return id != null && id.equals(otherWish.id);
     }
 
     @Override

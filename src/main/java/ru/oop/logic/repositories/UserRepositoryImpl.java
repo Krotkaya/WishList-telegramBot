@@ -4,61 +4,60 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import ru.oop.logic.models.Wishlist;
+import ru.oop.logic.models.User;
 
-public class WishlistRepositoryImpl implements WishlistRepository {
+public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
 
-    // Конструктор для инициализации SessionFactory
-    public WishlistRepositoryImpl() {
+    public UserRepositoryImpl() {
         this.sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
     @Override
-    public Wishlist save(Wishlist wishlist) {
-        if (wishlist.getId() != null) {
+    public User save(User user) {
+        if (user.getId() != null) {
             throw new IllegalArgumentException("ID должен быть null при сохранении нового объекта.");
         }
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.persist(wishlist); // persist для новых объектов
+            session.persist(user);
             transaction.commit();
-            return wishlist;
+            return user;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка при сохранении Wishlist", e);
+            throw new RuntimeException("Ошибка при сохранении User", e);
         }
     }
 
     @Override
-    public Wishlist update(Wishlist wishlist) {
-        if (wishlist.getId() == null) {
+    public User update(User user) {
+        if (user.getId() == null) {
             throw new IllegalArgumentException("ID не должен быть null при обновлении объекта.");
         }
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Wishlist updatedWishlist = (Wishlist) session.merge(wishlist); // merge для обновления
+            User updatedUser = (User) session.merge(user);
             transaction.commit();
-            return updatedWishlist;
+            return updatedUser;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка при обновлении Wishlist", e);
+            throw new RuntimeException("Ошибка при обновлении User", e);
         }
     }
 
     @Override
-    public Wishlist findById(Long id) {
+    public User findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Wishlist.class, id); // Поиск объекта по ID
+            return session.get(User.class, id);
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при поиске Wishlist с ID: " + id, e);
+            throw new RuntimeException("Ошибка при поиске User с ID: " + id, e);
         }
     }
 
@@ -67,32 +66,20 @@ public class WishlistRepositoryImpl implements WishlistRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            Wishlist wishlist = session.get(Wishlist.class, id);
-            if (wishlist != null) {
-                session.delete(wishlist); // Удаление объекта
+            User user = session.get(User.class, id);
+            if (user != null) {
+                session.delete(user);
             }
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка при удалении Wishlist с ID: " + id, e);
+            throw new RuntimeException("Ошибка при удалении User с ID: " + id, e);
         }
     }
 
-    // Закрытие SessionFactory
     public void close() {
         sessionFactory.close();
-    }
-
-    @Override
-    public List<Wishlist> findByUsername(long userId) {
-        List<Wishlist> userWishlists = new ArrayList<>();
-        for (Wishlist wishlist : database.values()) {
-            if (wishlist.getUserId() == userId) {
-                userWishlists.add(wishlist);
-            }
-        }
-        return userWishlists;
     }
 }

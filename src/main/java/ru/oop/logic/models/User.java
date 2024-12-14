@@ -1,20 +1,32 @@
 package ru.oop.logic.models;
-import java.util.List;
-import java.util.ArrayList;
 
+import jakarta.persistence.*; // Для Hibernate/Jakarta Persistence API
+
+@Entity
+@Table(name = "users") // Указывает таблицу в БД
 public class User {
-    private Long id;            // Уникальный идентификатор пользователя
-    private String username;    // Имя пользователя
-    private Long chatId;        // Идентификатор чата Telegram
-    private List<Wishlist> wishlists;    // Добавляем список вишлистов
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Автоматическая генерация ID
+    private Long id; // Уникальный идентификатор пользователя
+
+    @Column(nullable = false) // Поле "username" не может быть NULL
+    private String username; // Имя пользователя
+
+    @Column(nullable = false, unique = true) // Поле "chatId" уникально и не может быть NULL
+    private Long chatId; // Идентификатор чата Telegram
+
+    // Конструктор без аргументов (обязательно для Hibernate)
+    public User() {}
+
+    // Конструктор с параметрами
     public User(Long id, String username, Long chatId) {
         this.id = id;
         this.username = username;
         this.chatId = chatId;
-        this.wishlists = new ArrayList<>();
     }
 
+    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -39,21 +51,13 @@ public class User {
         this.chatId = chatId;
     }
 
-    public List<Wishlist> getWishlists() {
-        return wishlists;
-    }
-
-    public void addWishlist(Wishlist wishlist) {
-        this.wishlists.add(wishlist);
-    }
-
+    // Методы toString, equals и hashCode
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", chatId=" + chatId +
-                ", wishlists=" + wishlists +
                 '}';
     }
 

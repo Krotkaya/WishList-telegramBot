@@ -12,24 +12,26 @@ public class WishlistServiceImpl implements WishlistService {
 
     private final WishlistRepository repository; // Репозиторий для работы с данными
     private final Random random = new Random();
+
     public WishlistServiceImpl(WishlistRepository repository) {
         this.repository = repository;
     }
 
-
     @Override
-    public Wishlist createWishlist(long userId, String name) {
-        long id = Math.abs(random.nextLong());
-        Wishlist wishlist = new Wishlist(id, userId, name, new ArrayList<>());
-        return repository.save(wishlist);
+    public Wishlist createWishlist(Wishlist wishlist) {
+        if (wishlist.getId() == null) {
+            long id = Math.abs(random.nextLong());
+            wishlist.setId(id); // Генерация уникального ID
+        }
+        if (wishlist.getWishes() == null) {
+            wishlist.setWishes(new ArrayList<>()); // Инициализация пустого списка желаний
+        }
+        return repository.save(wishlist); // Сохраняем в репозитории
     }
-
+//на этом этапе у вишлиста еще нет айдишника, но мы уже с ними работаем.
     @Override
     public void addWishToWishlist(long wishlistId, Wish wish) {
-        // Получаем вишлист из репозитория
-
         Wishlist wishlist = repository.findById(wishlistId);
-        //Wish wishId = repository.findById(wish.getId());
 
         if (wishlist == null) {
             throw new IllegalArgumentException("Wishlist с ID " + wishlistId + " не найден.");
@@ -37,13 +39,10 @@ public class WishlistServiceImpl implements WishlistService {
         if (wish == null) {
             throw new IllegalArgumentException("Wish не может быть null.");
         }
-        if (wishlist.getWishes().contains(wish)) {
-            wishlist.getWishes().remove(wish); // Удаляем старый подарок
-        }
 
         // Удаляем старое пожелание, если оно уже существует
         wishlist.getWishes().removeIf(existingWish -> existingWish.getId().equals(wish.getId()));
-        wishlist.getWishes().add(wish);
+        wishlist.getWishes().add(wish); // Добавляем новое пожелание
 
         // Сохраняем изменения
         repository.save(wishlist);
@@ -51,7 +50,6 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public void deleteWishFromWishlist(long wishlistId, long wishId) {
-        // Получаем вишлист из репозитория
         Wishlist wishlist = repository.findById(wishlistId);
         if (wishlist == null) {
             throw new IllegalArgumentException("Wishlist с ID " + wishlistId + " не найден.");
@@ -66,31 +64,8 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public void deleteWishlist(long wishlistId) {
-        // Удаляем вишлист через репозиторий
-        repository.deleteById(wishlistId);
+        repository.deleteById(wishlistId); // Удаляем вишлист через репозиторий
     }
 
-    @Override
-    public List<Wishlist> getWishlistsByUserId(long userId) {
-        return repository.findByUsername(userId); // Получаем список вишлистов по userId
-    }
 
-    @Override
-    public void markItemAsTaken(long wishlistId, long wishId) {
-        Wishlist wishlist = repository.findById(wishlistId);
-        if (wishlist == null) {
-            throw new IllegalArgumentException("Wishlist с ID " + wishlistId + " не найден.");
-        }
-
-        for (Wish wish : wishlist.getWishes()) {
-            if (wish.getId().equals(wishId)) {
-                if (!wish.isAvailable()) {
-                    throw new IllegalArgumentException("Wish с ID " + wishId + " уже занято.");
-                }
-                wish.setAvailable(false); // Отметить как занято
-                break;
-            }
-        }
-        repository.save(wishlist); // Сохранить изменения
-    }
 }

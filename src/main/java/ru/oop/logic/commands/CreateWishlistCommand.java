@@ -17,8 +17,8 @@ public class CreateWishlistCommand implements Command {
     }
 
     @Override
-    public Pattern getCommandPattern() {
-        return Pattern.compile("/createWishlist (.+)"); // Шаблон для команды
+    public String getCommandPattern() {
+        return "/createWishlist (.+)"; // Шаблон в виде строки
     }
 
     @Override
@@ -26,17 +26,27 @@ public class CreateWishlistCommand implements Command {
         String name = matched.group(1); // Получаем имя вишлиста из команды
         Long userId = currentUser.getId(); // Получаем userId текущего пользователя
 
+        // Создаем объект Wishlist с пустым id (он будет сгенерирован в репозитории) и пустым списком желаний
+        Wishlist newWishlist = new Wishlist();
+
         // Создаем вишлист с помощью сервиса
-        Wishlist wishlist = wishlistService.createWishlist(userId, name);
+        Wishlist createdWishlist = wishlistService.createWishlist(newWishlist);
 
         // Возвращаем созданный ответ
-        return new Response("Вишлист '" + wishlist.getName() + "' успешно создан.ID вашего вишлиста: " + wishlist.getId());
+        return new Response("Вишлист '" + createdWishlist.getName() + "' успешно создан.");
+    }
+    @Override
+    public void execute(String chatId, String[] args) {
+        if (args.length == 0) {
+            System.out.println("Usage: /createwishlist <name>");
+            return;
+        }
+
+        String wishlistName = args[0];
+        wishlistService.createWishlist(new Wishlist());
+        System.out.println("Wishlist created: " + wishlistName);
     }
 }
-
-
-
-
 /*public class CreateWishlistCommand implements Command {
     private final WishlistService wishlistService;
 

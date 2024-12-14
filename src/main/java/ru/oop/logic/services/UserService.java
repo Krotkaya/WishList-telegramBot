@@ -1,75 +1,57 @@
-/*package ru.oop.logic.services;
+package ru.oop.logic.services;
 
-
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import ru.oop.logic.models.User;
+import ru.oop.logic.models.Wishlist;
+import ru.oop.logic.utils.HibernateUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserService {
-    private final Map<Long, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>(); // Сохраняем пользователей в памяти для быстрого доступа
 
+    // Поиск пользователя по chatId из базы данных
     public User getUserByChatId(Long chatId) {
-        // Поиск пользователя по chatId
-        for (User user : users.values()) {
-            if (user.getChatId().equals(chatId)) {
-                return user;
-            }
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM User WHERE chatId = :chatId", User.class)
+                    .setParameter("chatId", chatId)
+                    .uniqueResult();
         }
-        return null; // Если пользователь не найден
     }
 
+    // Сохранение нового пользователя в базу данных
+    public void saveUser(User user) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
+        }
+    }
+
+    // Добавление нового списка желаний пользователю
+    public void addWishlistToUser(User user, String wishlistName) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            // Создаём новый список желаний
+            Wishlist wishlist = new Wishlist();
+            wishlist.setName(wishlistName);
+            wishlist.setUser(user);
+
+            // Сохраняем список желаний
+            session.save(wishlist);
+            transaction.commit();
+        }
+    }
+
+    // Вспомогательные методы для работы с данными в памяти
     public void addUser(User user) {
-        users.put(user.getId(), user); // Добавление пользователя в систему
+        users.put(user.getId(), user); // Добавление пользователя в локальную память
     }
 
     public User getUserById(Long userId) {
-        return users.get(userId); // Поиск пользователя по id
-    }
-}*/
-package ru.oop.logic.services;
-
-import ru.oop.logic.models.User;
-import ru.oop.logic.models.Wishlist;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List; // Нужно для списка вишлистов
-import java.util.ArrayList; // Нужно для пустого списка
-
-public class UserService {
-    private final Map<Long, User> users = new HashMap<>();
-
-    public User getUserByChatId(Long chatId) {
-        // Поиск пользователя по chatId
-        for (User user : users.values()) {
-            if (user.getChatId().equals(chatId)) {
-                return user;
-            }
-        }
-        return null; // Если пользователь не найден
-    }
-
-    public void addUser(User user) {
-        users.put(user.getId(), user); // Добавление пользователя в систему
-    }
-
-    public User findByUsername(String userId) {
-        return users.get(userId); // Поиск пользователя по id
-    }
-
-    public void addWishlistToUser(String userId, Wishlist wishlist) {
-        User user = findByUsername(userId);
-        if (user != null) {
-            user.addWishlist(wishlist);
-        }
-    }
-
-    public List<Wishlist> getWishlistsByUserId(String userId) {
-        User user = findByUsername(userId);
-        if (user != null) {
-            return user.getWishlists();
-        }
-        return new ArrayList<>();
+        return users.get(userId); // Поиск пользователя по ID из локальной памяти
     }
 }
