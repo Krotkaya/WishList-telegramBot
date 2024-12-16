@@ -1,0 +1,27 @@
+<configuration>
+    <!-- Определяем аппендер для записи логов в файл -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/app.log</file> <!-- Указываем путь к файлу логов -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %5level - %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Настроим уровень логирования для Hibernate и перенаправим в файл -->
+    <logger name="org.hibernate.SQL" level="debug">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- Отключим вывод логов Hibernate в консоль -->
+    <logger name="org.hibernate" level="off"/>
+
+    <!-- Определяем корневой уровень логирования и подключаем аппендер только к файлу -->
+    <root level="debug">
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

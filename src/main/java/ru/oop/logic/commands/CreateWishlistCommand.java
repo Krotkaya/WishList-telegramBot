@@ -18,42 +18,20 @@ public class CreateWishlistCommand implements Command {
 
     @Override
     public Pattern getCommandPattern() {
-        return Pattern.compile("/createWishlist (.+)"); // Шаблон для команды
-    }
-
-    @Override
-    public Response executeCommand(Request request, Matcher matched, User currentUser) {
-        String name = matched.group(1); // Получаем имя вишлиста из команды
-        Long userId = currentUser.getId(); // Получаем userId текущего пользователя
-
-        // Создаем вишлист с помощью сервиса
-        Wishlist wishlist = wishlistService.createWishlist(userId, name);
-
-        // Возвращаем созданный ответ
-        return new Response("Вишлист '" + wishlist.getName() + "' успешно создан.ID вашего вишлиста: " + wishlist.getId());
-    }
-}
-
-
-
-
-/*public class CreateWishlistCommand implements Command {
-    private final WishlistService wishlistService;
-
-    public CreateWishlistCommand(WishlistService wishlistService) {
-        this.wishlistService = wishlistService;
-    }
-
-    @Override
-    public Pattern getCommandPattern() {
         return Pattern.compile("/createWishlist (.+)");
     }
 
     @Override
-    public Response executeCommand(Request request, Matcher matched, User currentUser) {
+    public Response executeCommand(Request request, Matcher matched, User user) {
         String name = matched.group(1);
-        Long userId = request.getUserId(); // Получение userId из запроса
-        String responseMessage = wishlistService.createWishlist(userId, name).getName();
-        return new Response("Вишлист '" + responseMessage + "' успешно создан."); // Паттерн не совпадает
+
+
+        Wishlist newWishlist = new Wishlist();
+        newWishlist.setName(name);
+        newWishlist.setUser(user);
+
+        Wishlist createdWishlist = wishlistService.createWishlist(newWishlist);
+
+        return new Response("Вишлист '" + createdWishlist.getName() + "' успешно создан.");
     }
-}*/
+}

@@ -1,18 +1,32 @@
 package ru.oop.logic.models;
-import java.util.List;
+
+import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "users")
 public class User {
-    private Long id;            // Уникальный идентификатор пользователя
-    private String username;    // Имя пользователя
-    private Long chatId;        // Идентификатор чата Telegram
-    private List<Wishlist> wishlists;    // Добавляем список вишлистов
 
-    public User(Long id, String username, Long chatId) {
-        this.id = id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "telegramId", nullable = false)
+    private long telegramId;
+
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> wishlists = new ArrayList<>();
+
+    public User() {}
+
+    public User(Long telegramId, String username) {
+        this.telegramId = telegramId;
         this.username = username;
-        this.chatId = chatId;
-        this.wishlists = new ArrayList<>();
     }
 
     public Long getId() {
@@ -23,6 +37,14 @@ public class User {
         this.id = id;
     }
 
+    public Long getTelegramId() {
+        return telegramId;
+    }
+
+    public void setTelegramId(Long telegramId) {
+        this.telegramId = telegramId;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -31,38 +53,30 @@ public class User {
         this.username = username;
     }
 
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
     public List<Wishlist> getWishlists() {
         return wishlists;
     }
 
-    public void addWishlist(Wishlist wishlist) {
-        this.wishlists.add(wishlist);
+    public void setWishlists(List<Wishlist> wishlists) {
+        this.wishlists = wishlists;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", telegramId='" + telegramId + '\'' +
                 ", username='" + username + '\'' +
-                ", chatId=" + chatId +
                 ", wishlists=" + wishlists +
                 '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof User)) return false;
-        User other = (User) obj;
-        return id != null && id.equals(other.id);
+        if (!(obj instanceof User otherUser)) {
+            return false;
+        }
+        return id != null && id.equals(otherUser.id);
     }
 
     @Override

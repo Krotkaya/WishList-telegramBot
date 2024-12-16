@@ -1,22 +1,31 @@
 package ru.oop.platforms.telegram;
+import io.github.cdimascio.dotenv.Dotenv;
 import ru.oop.logic.Request;
 import ru.oop.logic.OutputWriter;
-import ru.oop.logic.dialog.DialogRequestHandler;
+import ru.oop.logic.handlers.TelegramRequestHandler;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.oop.logic.models.User;
+import ru.oop.logic.services.ReminderService;
 import ru.oop.logic.services.UserService;
 
 
 public class TelegramBot extends TelegramLongPollingBot {
-    private final DialogRequestHandler dialogRequestHandler;
+    private final OutputWriter outputWriter;
+    private final TelegramRequestHandler telegramRequestHandler;
     private final UserService userService;
-    private final String botToken;
+    private final String botToken; // Добавьте это поле
 
-    public TelegramBot(DialogRequestHandler dialogRequestHandler, UserService userService, String botToken) {
-        this.dialogRequestHandler = dialogRequestHandler;
+    public TelegramBot(TelegramRequestHandler telegramRequestHandler, OutputWriter outputWriter, UserService userService) {
+        this.telegramRequestHandler = telegramRequestHandler;
         this.userService = userService;
-        this.botToken = botToken; // Инициализируем токен
+        this.outputWriter = outputWriter;
+        Dotenv dotenv = Dotenv.load();
+        String token = dotenv.get("TELEGRAM_BOT_TOKEN");
+        if (token == null || token.isBlank()) {
+            throw new IllegalStateException("TELEGRAM_BOT_TOKEN is not set in the environment variables.");
+        }
+        this.botToken = token; // Устанавливаем токен
     }
 
     @Override
@@ -29,46 +38,28 @@ public class TelegramBot extends TelegramLongPollingBot {
         return botToken;
     }
 
-
     @Override
-
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-            User currentUser = userService.getUserByChatId(chatId);
-
-            // Обрабатываем входящее сообщение
-            Request request = new Request(messageText);
-            OutputWriter outputWriter = new TelegramOutputWriter(String.valueOf(chatId), this);
-            dialogRequestHandler.handle(request, outputWriter);
+        if (!update.hasMessage() || !update.getMessage().hasText()) {
+            return;
         }
+
+        String messageText = update.getMessage().getText();
+        long telegramId = update.getMessage().getFrom().getId();
+        long chatId = update.getMessage().getChatId();
+
+
+        // Получаем пользователя по chatId или создаём нового
+        User user = userService.getUserByTelegramId(telegramId);
+        if (user == null) {
+            user = new User();
+            user.setTelegramId(telegramId);
+            user.setUsername(update.getMessage().getFrom().getUserName());
+            userService.saveUser(user);
+        }
+
+        Request request = new Request(messageText);
+        ((TelegramOutputWriter) outputWriter).setChatId(String.valueOf(chatId));
+        telegramRequestHandler.handle(request, outputWriter, user);
     }
-
-
 }
-
-
-
-/*public class TelegramBot extends TelegramLongPollingBot {
-    private final RequestHandler requestHandler;
-    private final String botToken;
-
-    public TelegramBot(RequestHandler requestHandler, String botToken) {
-        this.requestHandler = requestHandler; // сохраняем объект RequestHandler
-        this.botToken = botToken; // сохраняем токен бота
-    }*/
-
-
-    /*public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) { // проверяем, что сообщение есть и оно текстовое
-            String incomingMessage = update.getMessage().getText();
-            Request request = new Request(incomingMessage);
-
-            String chatId = String.valueOf(update.getMessage().getChatId());
-            TelegramOutputWriter telegramOutputWriter = new TelegramOutputWriter(chatId, this);
-
-            // Обработка запроса
-            requestHandler.handle(request, telegramOutputWriter);
-        }
-    }*/

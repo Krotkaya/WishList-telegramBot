@@ -22,8 +22,8 @@ public class DeleteWishlistCommand implements Command {
 
     @Override
     public Response executeCommand(Request request, Matcher matched, User currentUser) {
-        Long wishlistId = Long.valueOf(matched.group(1)); // ID вишлиста
-        wishlistService.deleteWishlist(wishlistId); // Удаление вишлиста
+        Long wishlistId = Long.valueOf(matched.group(1));
+        wishlistService.deleteWishlist(wishlistId);
         return new Response("Вишлист с ID " + wishlistId + " успешно удален.");
     }
 }

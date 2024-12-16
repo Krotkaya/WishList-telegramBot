@@ -21,8 +21,8 @@ public class ViewWishlistsCommand implements Command {
     }
 
     @Override
-    public Response executeCommand(Request request, Matcher matched, User currentUser) {
-        String targetUsername = matched.group(1); // Извлекаем имя пользователя
+    public Response executeCommand(Request request, Matcher matched, User user) {
+        String targetUsername = matched.group(1);
         User targetUser = userService.findByUsername(targetUsername);
 
         if (targetUser == null) {
@@ -31,7 +31,6 @@ public class ViewWishlistsCommand implements Command {
 
         List<Wishlist> wishlists = wishlistService.getWishlistsByUserId(targetUser.getId());
 
-        // Формирование ответа
         StringBuilder responseBuilder = new StringBuilder("Вишлисты пользователя '" + targetUsername + "':\n");
 
         if (wishlists.isEmpty()) {
@@ -51,6 +50,6 @@ public class ViewWishlistsCommand implements Command {
 
     @Override
     public Pattern getCommandPattern() {
-        return Pattern.compile("/viewWishlists (.+)"); // Регулярное выражение для команды
+        return Pattern.compile("/viewWishlists (.+)");
     }
 }

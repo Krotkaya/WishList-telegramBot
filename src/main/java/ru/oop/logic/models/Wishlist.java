@@ -1,32 +1,35 @@
 package ru.oop.logic.models;
 
-
+import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Модель для представления списка желаний
- */
+@Entity
+@Table(name = "wishlists")
 public class Wishlist {
 
-    private Long id;             // Уникальный идентификатор списка
-    private Long userId;         // Идентификатор пользователя
-    private String name;         // Название списка
-    private List<Wish> wishes;   // Список желаний
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false) // Связь с таблицей пользователей
+    private User user;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wish> wishes = new ArrayList<>();
 
     // Конструктор по умолчанию
-    public Wishlist() {
-        this.id = null;
-        this.userId = null;
-        this.name = "";
-        this.wishes = List.of();
-    }
+    public Wishlist() {}
 
-    // Конструктор
-    public Wishlist(Long id, Long userId, String name, List<Wish> wishes) {
-        this.id = id;
-        this.userId = userId;
+    // Конструктор с параметрами
+    public Wishlist(User user, String name) {
+        this.user = user;
         this.name = name;
-        this.wishes = wishes;
     }
 
     // Геттеры и сеттеры
@@ -38,12 +41,12 @@ public class Wishlist {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -62,12 +65,11 @@ public class Wishlist {
         this.wishes = wishes;
     }
 
-    // Переопределение toString для удобного отображения
     @Override
     public String toString() {
         return "Wishlist{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", name='" + name + '\'' +
                 ", wishes=" + wishes +
                 '}';
@@ -75,12 +77,14 @@ public class Wishlist {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Wishlist otherWishList)) {
-            return false; // Если obj не является экземпляром Wishlist
+        if (!(obj instanceof Wishlist otherWishlist)) {
+            return false;
         }
+        return id != null && id.equals(otherWishlist.id);
+    }
 
-        // Сравнение значимых полей
-        return this.id != null && this.id.equals(otherWishList.id);
-
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

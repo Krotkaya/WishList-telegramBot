@@ -1,75 +1,42 @@
-/*package ru.oop.logic.services;
-
-
-import ru.oop.logic.models.User;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class UserService {
-    private final Map<Long, User> users = new HashMap<>();
-
-    public User getUserByChatId(Long chatId) {
-        // Поиск пользователя по chatId
-        for (User user : users.values()) {
-            if (user.getChatId().equals(chatId)) {
-                return user;
-            }
-        }
-        return null; // Если пользователь не найден
-    }
-
-    public void addUser(User user) {
-        users.put(user.getId(), user); // Добавление пользователя в систему
-    }
-
-    public User getUserById(Long userId) {
-        return users.get(userId); // Поиск пользователя по id
-    }
-}*/
 package ru.oop.logic.services;
 
 import ru.oop.logic.models.User;
 import ru.oop.logic.models.Wishlist;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List; // Нужно для списка вишлистов
-import java.util.ArrayList; // Нужно для пустого списка
+import ru.oop.logic.repositories.UserRepository;
 
 public class UserService {
-    private final Map<Long, User> users = new HashMap<>();
+    private final UserRepository userRepository;
 
-    public User getUserByChatId(Long chatId) {
-        // Поиск пользователя по chatId
-        for (User user : users.values()) {
-            if (user.getChatId().equals(chatId)) {
-                return user;
-            }
-        }
-        return null; // Если пользователь не найден
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public void addUser(User user) {
-        users.put(user.getId(), user); // Добавление пользователя в систему
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId);
     }
 
-    public User findByUsername(String userId) {
-        return users.get(userId); // Поиск пользователя по id
+    public User getUserByTelegramId(Long userId) {
+        return userRepository.findByTelegramId(userId);
     }
 
-    public void addWishlistToUser(String userId, Wishlist wishlist) {
-        User user = findByUsername(userId);
-        if (user != null) {
-            user.addWishlist(wishlist);
-        }
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
-    public List<Wishlist> getWishlistsByUserId(String userId) {
-        User user = findByUsername(userId);
-        if (user != null) {
-            return user.getWishlists();
-        }
-        return new ArrayList<>();
+    public User updateUser(User user) {
+        return userRepository.update(user);
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    public void addWishlistToUser(User user, Wishlist wishlist) {
+        user.getWishlists().add(wishlist);
+        userRepository.update(user);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
