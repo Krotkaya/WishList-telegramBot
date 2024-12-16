@@ -7,5 +7,5 @@ public interface WishRepository {
     Wish save(Wish wish);
     Wish update(Wish wish);
     Wish findById(Long id);
-    void deleteById(Long id);
+    void deleteById(long id, long wishlistId);
 }

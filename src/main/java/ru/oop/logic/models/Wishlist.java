@@ -10,26 +10,26 @@ public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Связь с таблицей users
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false) // Связь с таблицей пользователей
     private User user;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
     // Конструктор по умолчанию
     public Wishlist() {}
 
     // Конструктор с параметрами
-    public Wishlist(User user, String name, List<Wish> wishes) {
+    public Wishlist(User user, String name) {
         this.user = user;
         this.name = name;
-        this.wishes = (wishes != null) ? wishes : new ArrayList<>();
     }
 
     // Геттеры и сеттеры

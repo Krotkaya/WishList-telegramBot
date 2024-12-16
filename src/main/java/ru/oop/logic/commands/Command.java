@@ -5,9 +5,9 @@ import ru.oop.logic.Response;
 import ru.oop.logic.models.User; // Предполагаем, что у вас есть модель User
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public interface Command {
-    String getCommandPattern();
+    Pattern getCommandPattern();
     Response executeCommand(Request request, Matcher matched, User currentUser);
-    void execute(String chatId, String[] args);
 }

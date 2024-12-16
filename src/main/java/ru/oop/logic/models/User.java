@@ -1,38 +1,48 @@
 package ru.oop.logic.models;
 
-import jakarta.persistence.*; // Для Hibernate/Jakarta Persistence API
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "users") // Указывает таблицу в БД
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Автоматическая генерация ID
-    private Long id; // Уникальный идентификатор пользователя
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @Column(nullable = false) // Поле "username" не может быть NULL
-    private String username; // Имя пользователя
+    @Column(name = "telegramId", nullable = false)
+    private long telegramId;
 
-    @Column(nullable = false, unique = true) // Поле "chatId" уникально и не может быть NULL
-    private Long chatId; // Идентификатор чата Telegram
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    // Конструктор без аргументов (обязательно для Hibernate)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> wishlists = new ArrayList<>();
+
     public User() {}
 
-    // Конструктор с параметрами
-    public User(Long id, String username, Long chatId) {
-        this.id = id;
+    public User(Long telegramId, String username) {
+        this.telegramId = telegramId;
         this.username = username;
-        this.chatId = chatId;
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTelegramId() {
+        return telegramId;
+    }
+
+    public void setTelegramId(Long telegramId) {
+        this.telegramId = telegramId;
     }
 
     public String getUsername() {
@@ -43,30 +53,30 @@ public class User {
         this.username = username;
     }
 
-    public Long getChatId() {
-        return chatId;
+    public List<Wishlist> getWishlists() {
+        return wishlists;
     }
 
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
+    public void setWishlists(List<Wishlist> wishlists) {
+        this.wishlists = wishlists;
     }
 
-    // Методы toString, equals и hashCode
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", telegramId='" + telegramId + '\'' +
                 ", username='" + username + '\'' +
-                ", chatId=" + chatId +
+                ", wishlists=" + wishlists +
                 '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof User)) return false;
-        User other = (User) obj;
-        return id != null && id.equals(other.id);
+        if (!(obj instanceof User otherUser)) {
+            return false;
+        }
+        return id != null && id.equals(otherUser.id);
     }
 
     @Override

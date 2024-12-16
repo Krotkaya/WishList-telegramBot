@@ -7,6 +7,7 @@ import ru.oop.logic.models.Wish;
 import ru.oop.logic.models.User;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddWishToWishlistCommand implements Command {
     private final WishlistService wishlistService;
@@ -16,30 +17,26 @@ public class AddWishToWishlistCommand implements Command {
     }
 
     @Override
-    public String getCommandPattern() {
-        return "add wish (\\d+) (.+)"; // Пример команды: "add wish <wishlistId> <wishDescription>"
+    public Pattern getCommandPattern() {
+        return Pattern.compile("/addWish (\\d+) (.+)"); // Пример команды: "add wish <wishlistId> <wishDescription>"
     }
 
     @Override
     public Response executeCommand(Request request, Matcher matched, User currentUser) {
         try {
-            // Проверяем, что пользователь существует
             if (currentUser == null) {
                 return new Response("Пользователь не найден. Пожалуйста, зарегистрируйтесь.");
             }
 
-            // Извлекаем данные из команды
-            long wishlistId = Long.parseLong(matched.group(1)); // ID списка желаний
-            String wishDescription = matched.group(2); // Описание желания
+            long wishlistId = Long.parseLong(matched.group(1));
+            String wishDescription = matched.group(2);
 
             if (wishDescription == null || wishDescription.isBlank()) {
                 return new Response("Описание желания не может быть пустым.");
             }
 
-            // Создаем объект желания
-            Wish wish = new Wish(wishDescription, null); // Передаём null для Wishlist, если он будет установлен позже
+            Wish wish = new Wish(wishDescription, null);
 
-            // Добавляем желание в список через сервис
             wishlistService.addWishToWishlist(wishlistId, wish);
 
             return new Response("Желание успешно добавлено в список желаний.");
@@ -50,10 +47,5 @@ public class AddWishToWishlistCommand implements Command {
         } catch (Exception e) {
             return new Response("Произошла непредвиденная ошибка: " + e.getMessage());
         }
-    }
-
-    @Override
-    public void execute(String chatId, String[] args) {
-
     }
 }

@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import ru.oop.logic.models.User;
 
 public class UserRepositoryImpl implements UserRepository {
@@ -19,18 +20,13 @@ public class UserRepositoryImpl implements UserRepository {
         if (user.getId() != null) {
             throw new IllegalArgumentException("ID должен быть null при сохранении нового объекта.");
         }
-        Transaction transaction = null;
+        Transaction transaction;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.persist(user);
             transaction.commit();
-            return user;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при сохранении User", e);
         }
+        return user;
     }
 
     @Override
@@ -58,6 +54,30 @@ public class UserRepositoryImpl implements UserRepository {
             return session.get(User.class, id);
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при поиске User с ID: " + id, e);
+        }
+    }
+
+    @Override
+    public User findByTelegramId(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM User u WHERE u.telegramId = :telegramId";
+            Query<User> query = session.createQuery(hql, User.class);
+            query.setParameter("telegramId", id); // Замените "name" на имя, которое ищете
+            // Возвращает единственного пользователя или null
+            return query.uniqueResult();
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при поиске User с ID: " + id, e);
+        }
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM User WHERE username = :username", User.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при поиске пользователя с именем: " + username, e);
         }
     }
 

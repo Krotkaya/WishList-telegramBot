@@ -6,6 +6,8 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import ru.oop.logic.models.Wishlist;
 
+import java.util.List;
+
 public class WishlistRepositoryImpl implements WishlistRepository {
 
     private final SessionFactory sessionFactory;
@@ -80,19 +82,20 @@ public class WishlistRepositoryImpl implements WishlistRepository {
         }
     }
 
+    @Override
+    public List<Wishlist> findByUsername(long userId) {
+        try (Session session = sessionFactory.openSession()) {
+            // HQL для получения всех Wishlists по userId
+            return session.createQuery("FROM Wishlist WHERE user.id = :userId", Wishlist.class)
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при поиске Wishlist для пользователя с ID: " + userId, e);
+        }
+    }
+
     // Закрытие SessionFactory
     public void close() {
         sessionFactory.close();
-    }
-
-    @Override
-    public List<Wishlist> findByUsername(long userId) {
-        List<Wishlist> userWishlists = new ArrayList<>();
-        for (Wishlist wishlist : database.values()) {
-            if (wishlist.getUserId() == userId) {
-                userWishlists.add(wishlist);
-            }
-        }
-        return userWishlists;
     }
 }

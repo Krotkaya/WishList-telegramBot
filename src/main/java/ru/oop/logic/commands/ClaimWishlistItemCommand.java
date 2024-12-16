@@ -4,7 +4,6 @@ import ru.oop.logic.Request;
 import ru.oop.logic.Response;
 import ru.oop.logic.services.WishlistService;
 import ru.oop.logic.services.UserService;
-import ru.oop.logic.models.Wish;
 import ru.oop.logic.models.Wishlist;
 import ru.oop.logic.models.User;
 
@@ -23,22 +22,22 @@ public class ClaimWishlistItemCommand implements Command {
 
     @Override
     public Response executeCommand(Request request, Matcher matched, User currentUser) {
-        String targetUsername = matched.group(1); // Извлекаем имя пользователя
-        Long itemId = Long.parseLong(matched.group(2)); // Извлекаем ID пожелания
+        String targetUsername = matched.group(1);
+        long itemId = Long.parseLong(matched.group(2));
 
         User targetUser = userService.findByUsername(targetUsername);
         if (targetUser == null) {
             return new Response("Пользователь с именем '" + targetUsername + "' не найден.");
         }
 
-        Wishlist wishlist = wishlistService.getWishlistsByUserId(targetUser.getId()).get(0); // Получить первый вишлист
-        wishlistService.markItemAsTaken(wishlist.getId(), itemId); // Пометить пожелание как занято
+        Wishlist wishlist = wishlistService.getWishlistsByUserId(targetUser.getId()).getFirst();
+        wishlistService.markItemAsTaken(wishlist.getId(), itemId);
 
-        return new Response("Пожелание с ID " + itemId + " было занято пользователем '" + currentUser.getUsername() + "'.");
+        return new Response("Пожелание с ID " + itemId + " было занято пользователем '" + currentUser.getTelegramId() + "'.");
     }
 
     @Override
     public Pattern getCommandPattern() {
-        return Pattern.compile("/claimItem (.+) (\\d+)"); // Регулярное выражение для команды
+        return Pattern.compile("/claimItem (.+) (\\d+)");
     }
 }

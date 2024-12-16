@@ -11,4 +11,6 @@ public interface WishlistRepository {
     Wishlist update(Wishlist wishlist); // Для существующих объектов
     Wishlist findById(Long id); // Найти объект по ID
     void deleteById(Long id); // Удалить объект по ID
+
+    List<Wishlist> findByUsername(long userId);
 }

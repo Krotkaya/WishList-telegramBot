@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import ru.oop.logic.models.Wish;
+import ru.oop.logic.models.Wishlist;
 
 public class WishRepositoryImpl implements WishRepository {
 
@@ -62,10 +63,14 @@ public class WishRepositoryImpl implements WishRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(long id, long wishlistId) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
+
+            Wishlist wishlist = session.get(Wishlist.class, wishlistId);
+            Wish wishToRemove = session.get(Wish.class, id);
+            wishlist.getWishes().remove(wishToRemove);
             Wish wish = session.get(Wish.class, id);
             if (wish != null) {
                 session.delete(wish);

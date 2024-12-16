@@ -22,14 +22,9 @@ public class DeleteWishFromWishlistCommand implements Command {
 
     @Override
     public Response executeCommand(Request request, Matcher matched, User currentUser) {
-        Long wishlistId = Long.valueOf(matched.group(1)); // ID вишлиста
-        Long wishId = Long.valueOf(matched.group(2)); // ID пожелания
-        wishlistService.deleteWishFromWishlist(wishlistId, wishId); // Удаление пожелания
+        long wishlistId = Long.parseLong(matched.group(1));
+        long wishId = Long.parseLong(matched.group(2));
+        wishlistService.deleteWishFromWishlist(wishlistId, wishId);
         return new Response("Пожелание с ID " + wishId + " успешно удалено из вишлиста с ID " + wishlistId + ".");
-    }
-
-    @Override
-    public void execute(String chatId, String[] args) {
-
     }
 }

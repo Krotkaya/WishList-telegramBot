@@ -8,6 +8,7 @@ public class Wish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "description", nullable = false)
@@ -17,8 +18,10 @@ public class Wish {
     @JoinColumn(name = "wishlist_id", nullable = false) // Связь с Wishlist
     private Wishlist wishlist;
 
+    // Конструктор без параметров
     public Wish() {}
 
+    // Конструктор с параметрами
     public Wish(String description, Wishlist wishlist) {
         this.description = description;
         this.wishlist = wishlist;

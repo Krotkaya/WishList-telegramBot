@@ -9,9 +9,15 @@
         <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
 
         <!-- Дополнительные настройки -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.bytecode.provider">bytebuddy</property>
+        <property name="hibernate.enhancer.enableLazyInitialization">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+
+
 
         <!-- Список классов-сущностей -->
         <mapping class="ru.oop.logic.models.User" />
