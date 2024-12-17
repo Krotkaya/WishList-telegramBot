@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class TelegramRequestHandler implements RequestHandler {
-    private Command[] commands;
     private static final Logger LOG = LoggerFactory.getLogger(TelegramRequestHandler.class); // Для логирования
+    private Command[] commands;
 
     @Override
     public void setCommands(Command[] commands) {
@@ -25,45 +25,39 @@ public class TelegramRequestHandler implements RequestHandler {
     public void handle(Request request, OutputWriter writer, User user) {
         Response response = null;
 
-        // Извлекаем сообщение из запроса
         String message = request.getMessage();
-        LOG.debug("Received message: {}", message); // Логируем получение сообщения
+        LOG.debug("Received message: {}", message);
 
-        // Логируем количество зарегистрированных команд
         LOG.debug("Total registered commands: {}", commands.length);
 
-        // Перебираем все зарегистрированные команды
         for (Command command : commands) {
-            LOG.debug("Checking command: {}", command.getClass().getSimpleName()); // Логируем имя текущей команды
-            LOG.debug("Command pattern: {}", command.getCommandPattern()); // Логируем шаблон команды
+            LOG.debug("Checking command: {}", command.getClass().getSimpleName());
+            LOG.debug("Command pattern: {}", command.getCommandPattern());
 
-            // Должны возвращать не строку, а pattern
             Pattern pattern = command.getCommandPattern();
             Matcher matcher = pattern.matcher(message);
 
-            // Проверяем, соответствует ли сообщение текущей команде
             if (matcher.matches()) {
-                LOG.debug("Command matched: {}", command.getCommandPattern()); // Логируем успешное совпадение
+                LOG.debug("Command matched: {}", command.getCommandPattern());
                 try {
-                    response = command.executeCommand(request, matcher, user); // Выполнение команды
-                    LOG.info("Command executed successfully: {}", command.getClass().getSimpleName()); // Логируем успешное выполнение
+                    response = command.executeCommand(request, matcher, user);
+                    LOG.info("Command executed successfully: {}", command.getClass().getSimpleName());
                 } catch (Exception e) {
-                    LOG.error("Error while executing command: {}", command.getClass().getSimpleName(), e); // Логируем ошибку при выполнении команды
-                    response = new Response("Ошибка выполнения команды."); // error
+                    LOG.error("Error while executing command: {}", command.getClass().getSimpleName(), e);
+                    response = new Response("Ошибка выполнения команды.");
                 }
-                break; // Прекращаем перебор, так как команда найдена
+                break;
             } else {
-                LOG.debug("No match for command: {}", command.getClass().getSimpleName()); // Логируем, если команда не совпала
+                LOG.debug("No match for command: {}", command.getClass().getSimpleName());
             }
         }
 
-        // Если команда не найдена, возвращаем сообщение об ошибке
+
         if (response == null) {
-            LOG.warn("Unknown command: {}", message); // Логируем неизвестную команду
+            LOG.warn("Unknown command: {}", message);
             response = new Response("Неизвестная команда.");
         }
 
-        // Пишем ответ через OutputWriter
         LOG.debug("Sending response: {}", response.getMessage());
         writer.write(response.getMessage());
     }

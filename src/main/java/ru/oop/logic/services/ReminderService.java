@@ -17,9 +17,8 @@ public class ReminderService {
 
             long chatId = user.getTelegramId();
             ((TelegramOutputWriter) outputWriter).setChatId(String.valueOf(chatId));
-            outputWriter.write(reminderMessage);  // метод sendMessage должен быть реализован в TelegramBot
+            outputWriter.write(reminderMessage);
         };
-
 
         scheduler.schedule(reminderTask, delayInMillis, TimeUnit.MILLISECONDS);
     }

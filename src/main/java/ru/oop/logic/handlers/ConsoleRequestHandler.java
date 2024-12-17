@@ -60,6 +60,5 @@ public class ConsoleRequestHandler implements RequestHandler {
 
         logger.debug("Sending response: {}", response.getMessage());
         writer.write(response.getMessage());
-        writer.write(String.valueOf(response));
     }
 }
