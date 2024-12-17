@@ -7,6 +7,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import ru.oop.logic.models.User;
 
+import java.util.List;
+
 public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
@@ -37,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            User updatedUser = (User) session.merge(user);
+            User updatedUser = session.merge(user);
             transaction.commit();
             return updatedUser;
         } catch (Exception e) {
@@ -62,8 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             String hql = "FROM User u WHERE u.telegramId = :telegramId";
             Query<User> query = session.createQuery(hql, User.class);
-            query.setParameter("telegramId", id); // Замените "name" на имя, которое ищете
-            // Возвращает единственного пользователя или null
+            query.setParameter("telegramId", id);
             return query.uniqueResult();
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при поиске User с ID: " + id, e);
@@ -78,6 +79,17 @@ public class UserRepositoryImpl implements UserRepository {
                     .uniqueResult();
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при поиске пользователя с именем: " + username, e);
+        }
+    }
+
+    public List<User> findByUsernameLike(String usernamePart) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM User u WHERE u.username LIKE :usernamePart";
+            Query<User> query = session.createQuery(hql, User.class);
+            query.setParameter("usernamePart", "%" + usernamePart + "%");
+            return query.list();
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при поиске пользователей по имени, содержащему: " + usernamePart, e);
         }
     }
 
@@ -97,9 +109,5 @@ public class UserRepositoryImpl implements UserRepository {
             }
             throw new RuntimeException("Ошибка при удалении User с ID: " + id, e);
         }
-    }
-
-    public void close() {
-        sessionFactory.close();
     }
 }
