@@ -37,7 +37,9 @@ public class Main {
                 new DeleteWishFromWishlistCommand(wishlistService),
                 new DeleteWishlistCommand(wishlistService),
                 new SetReminderCommand(reminderService),
-                new ViewWishlistsCommand(wishlistService, userService)
+                new ViewWishlistsCommand(wishlistService, userService),
+                new SearchUserByNameCommand(userService),
+                new StartCommand(userService)
         };
 
 
@@ -56,13 +58,13 @@ public class Main {
             e.printStackTrace();
         }
 
-//        ConsoleRequestHandler consoleRequestHandler = new ConsoleRequestHandler();
-//        consoleRequestHandler.setCommands(commands);
-//
-//        ConsoleOutputWriter consoleOutputWriter = new ConsoleOutputWriter();
-//        ConsoleBot consoleBot = new ConsoleBot(new ConsoleInputReader(), consoleOutputWriter, consoleRequestHandler, userService);
-//        reminderService.setOutputWriter(consoleOutputWriter);
-//        consoleBot.startBot();
+        ConsoleRequestHandler consoleRequestHandler = new ConsoleRequestHandler();
+        consoleRequestHandler.setCommands(commands);
+
+        ConsoleOutputWriter consoleOutputWriter = new ConsoleOutputWriter();
+        ConsoleBot consoleBot = new ConsoleBot(new ConsoleInputReader(), consoleOutputWriter, consoleRequestHandler, userService);
+        reminderService.setOutputWriter(consoleOutputWriter);
+        consoleBot.startBot();
 
     }
 }
