@@ -26,14 +26,17 @@ public class WishlistServiceImpl implements WishlistService {
     }
     @Override
     public void addWishToWishlist(long wishlistId, Wish wish) {
+
+        if (wish == null) {
+            throw new IllegalArgumentException("Wish не может быть null.");
+        }
+
         Wishlist wishlist = repository.findById(wishlistId);
 
         if (wishlist == null) {
             throw new IllegalArgumentException("Wishlist с ID " + wishlistId + " не найден.");
         }
-        if (wish == null) {
-            throw new IllegalArgumentException("Wish не может быть null.");
-        }
+
 
         wishlist.getWishes().removeIf(existingWish -> existingWish.getId().equals(wish.getId()));
         wishlist.getWishes().add(wish);
